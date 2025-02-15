@@ -7,6 +7,7 @@ import morgan from "morgan";
 // routes
 import logRoutes from "./routes/logs.js";
 import loginRoute from "./routes/login.js";
+import logoutRoute from "./routes/logout.js";
 import masterRoute from "./routes/master.js";
 
 const app = express();
@@ -35,6 +36,7 @@ app.use(morgan(morganFormat));
 // Routes
 app.use("/api/", logRoutes);
 app.use("/api/auth", loginRoute);
+app.use("/api/auth", logoutRoute);
 app.use("/api/master", masterRoute);
 
 // test route
