@@ -72,9 +72,10 @@ export const logout = async (req, res) => {
   try {
     // get user from req
     const { user_id } = req.body;
-
+    console.log("logged out",user_id);
+    
     // log out model call
-    const [rows] = await userLogoutModel(user_id);
+    await userLogoutModel(user_id);
 
     // debug logging
     logger.debug(
