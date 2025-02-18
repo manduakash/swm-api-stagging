@@ -50,3 +50,13 @@ export async function getAllPropertyTypesModel() {
     throw new Error("DB error: " + error.message);
   }
 }
+
+export async function getAllUserTypesModel() {
+  try {
+    const [rows] = await pool.query("CALL GetAllUserTypes()");
+    return rows[0];
+  } catch (error) {
+    logger.error(error.message);
+    throw new Error("DB error: " + error.message);
+  }
+}

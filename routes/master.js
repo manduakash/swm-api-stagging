@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllPropertyTypes, getBlocksByDistrict, getDistrictsByState, getGPsByBlock, getVillagesByGP } from '../controllers/masterController.js';
+import { getAllPropertyTypes, getAllUserTypes, getBlocksByDistrict, getDistrictsByState, getGPsByBlock, getVillagesByGP } from '../controllers/masterController.js';
 const router = express.Router();
 
 
@@ -8,5 +8,6 @@ router.post('/getBlocksByDistrict', getBlocksByDistrict);
 router.post('/getGPsByBlock', getGPsByBlock);
 router.post('/getVillagesByGP', getVillagesByGP);
 router.post('/getAllPropertyTypes', getAllPropertyTypes);
+router.post('/getAllUserTypes', getAllUserTypes);
 
 export default router;

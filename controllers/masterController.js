@@ -1,5 +1,6 @@
 import {
     getAllPropertyTypesModel,
+  getAllUserTypesModel,
   getBlocksByDistrictModel,
   getDistrictsByStateModel,
   getGPsByBlockModel,
@@ -295,6 +296,50 @@ export const getAllPropertyTypes = async (req, res) => {
       logger.debug(
         JSON.stringify({
           API: "getAllPropertyTypes",
+          REQUEST: { },
+          RESPONSE: {
+            success: false,
+            message: "Data fetched successfully",
+            data: rows,
+          },
+        })
+      );
+
+      // sending api response to client
+      res.status(200).json({
+        success: true,
+        message: "Data fetched successfully",
+        data: rows,
+      });
+    } else {
+      return res.status(200).json({
+        success: false,
+        message: "No record(s) found",
+        data: [],
+      });
+    }
+  } catch (error) {
+    // error logging
+    logger.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred, Please try again",
+      data: null,
+    });
+  }
+};
+
+export const getAllUserTypes = async (req, res) => {
+  try {
+
+    // calling model method
+    const rows = await getAllUserTypesModel();
+
+    if (rows !== undefined && rows?.length !== 0) {
+      // debug logging
+      logger.debug(
+        JSON.stringify({
+          API: "getAllUserTypes",
           REQUEST: { },
           RESPONSE: {
             success: false,
