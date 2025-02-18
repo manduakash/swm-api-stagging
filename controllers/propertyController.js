@@ -75,7 +75,7 @@ export const insertProperty = async (req, res) => {
     }
 
     // calling model method
-    const rows = await insertPropertyModel(
+    const result = await insertPropertyModel(
       PropertyTypeID,
       PropertyName,
       PropertyAddress,
@@ -92,7 +92,8 @@ export const insertProperty = async (req, res) => {
       CollectionType
     );
 
-    if (rows !== undefined && rows?.length !== 0) {
+    if (result) {
+      // in inserted
       // debug logging
       logger.debug(
         JSON.stringify({
@@ -115,7 +116,7 @@ export const insertProperty = async (req, res) => {
           },
           RESPONSE: {
             success: false,
-            message: "Data inserted successfully"
+            message: "Data saved successfully",
           },
         })
       );
@@ -123,12 +124,38 @@ export const insertProperty = async (req, res) => {
       // sending api response to client
       res.status(200).json({
         success: true,
-        message: "Data inserted successfully",
+        message: "Data saved successfully",
       });
     } else {
-      return res.status(200).json({
+     // if data not inserted
+     logger.debug(
+        JSON.stringify({
+          API: "insertProperty",
+          REQUEST: {
+            PropertyTypeID,
+            PropertyName,
+            PropertyAddress,
+            StateID,
+            DistrictID,
+            BlockID,
+            GPID,
+            PropertyNumber,
+            LandMark,
+            Latitude,
+            Longitude,
+            OwnerName,
+            OwnerPhoneNumber,
+            CollectionType,
+          },
+          RESPONSE: {
+            success: false,
+            message: "Failed to save data",
+          },
+        })
+      );
+      return res.status(400).json({
         success: false,
-        message: "Failed to insert data",
+        message: "Failed to save data",
       });
     }
   } catch (error) {

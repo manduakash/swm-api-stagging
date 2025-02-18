@@ -16,26 +16,30 @@ export async function insertPropertyModel(
   OwnerPhoneNumber,
   CollectionType
 ) {
-  const [rows] = await pool.query(
-    "CALL InsertProperty(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
-    [
-      PropertyTypeID,
-      PropertyName,
-      PropertyAddress,
-      StateID,
-      DistrictID,
-      BlockID,
-      GPID,
-      PropertyNumber,
-      LandMark,
-      Latitude,
-      Longitude,
-      OwnerName,
-      OwnerPhoneNumber,
-      CollectionType,
-    ]
-  );
+  try {
+    const [rows] = await pool.query(
+      "CALL InsertProperty(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+      [
+        PropertyTypeID,
+        PropertyName,
+        PropertyAddress,
+        StateID,
+        DistrictID,
+        BlockID,
+        GPID,
+        PropertyNumber,
+        LandMark,
+        Latitude,
+        Longitude,
+        OwnerName,
+        OwnerPhoneNumber,
+        CollectionType,
+      ]
+    );
 
-  console.log("rows", rows)
-  return rows;
+    return rows?.affectedRows;
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
 }
