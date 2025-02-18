@@ -1,26 +1,18 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
+import verifyToken from "./middleware/authMiddleware.js";
+import loginRoutes from "./routes/login.js";
+import logoutRoutes from "./routes/logout.js";
 import cors from "cors";
 import morgan from "morgan";
-
-// routes
 import logRoutes from "./routes/logs.js";
-import loginRoute from "./routes/login.js";
-import logoutRoute from "./routes/logout.js";
-import masterRoute from "./routes/master.js";
 
 const app = express();
-// env variables
-const host = process.env.API_HOST || 3003;
-const port = process.env.API_PORT || 3003;
+const port = process.env.PORT || 3001;
 
-// for api input in body (json)
-app.use(express.json({ limit: "25mb" }));
-// for api input in form-date
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
-
-// for whitelisting
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(
   cors({
     origin: "*",
@@ -29,25 +21,26 @@ app.use(
   })
 );
 
-// morgan for scrutiny on api requests
-const morganFormat = process.env.NODE_ENV === "development"? "dev" : "common";
-app.use(morgan(morganFormat));
+// api status information
+app.use(morgan("dev"));
 
-// Routes
+//public Route
 app.use("/api/", logRoutes);
-app.use("/api/auth", loginRoute);
-app.use("/api/auth", logoutRoute);
-app.use("/api/master", masterRoute);
+app.use("/api/auth/", loginRoutes);
+
+//private Route
+app.use("/api/auth/", verifyToken, logoutRoutes);
 
 // test route
 app.use("/test", (req, res) => {
   res.send("api running...");
 });
 
+setupSwagger(app);
 
-// starting server log
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
-  console.log(`API log is available at ${host}/api/logs?file=debug.log`);
-  console.log(`API log is available at ${host}/api/logs?file=error.log`);
+  console.log(`Swagger UI is available at http://localhost:${port}/api-docs`);
+  console.log(`API log is available at http://localhost:${port}/api/logs?file=debug.log`);
+  console.log(`API log is available at http://localhost:${port}/api/logs?file=error.log`);
 });
