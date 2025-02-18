@@ -7,7 +7,6 @@ export async function userLoginModel(username, password) {
       username,
       password,
     ]);
-    
     return rows[0];
   } catch (error) {
     logger.error(error.message);

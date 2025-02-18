@@ -1,198 +1,105 @@
-import jwt from "jsonwebtoken";
-import { getUserLoginModel, updateAuthToken } from '../models/authModels.js';
+import { userLoginModel, userLogoutModel } from "../models/authModel.js";
 import logger from "../utils/logger.js";
 
-// Secret key for JWT (ensure this is stored securely in environment variables)
-const JWT_SECRET = process.env.JWT_SECRET;
+export const login = async (req, res) => {
+  try {
+    const { username, password } = req.body; // get username and password from request
 
+    if (!username || !password) {
+      // if username or password not provided
+      logger.debug(
+        // debug logging
+        JSON.stringify({
+          API: "login",
+          REQUEST: { username, password },
+          RESPONSE: {
+            success: false,
+            message: "Invalid Username or Password",
+          },
+        })
+      );
 
-export const sendOtp = async (req, res) => {
-    try {
-        const { username, password } = req.body;
-
-
-        if (!username) {
-            return res.status(400).json({
-                status: 1,
-                message: "Invalid username",
-                data: null,
-            });
-        } else if (!password) {
-            logger.debug(
-                JSON.stringify({
-                    API: "sendOtp",
-                    REQUEST: { username, password },
-                    RESPONSE: {
-                        status: 1,
-                        message: "Invalid Password",
-                        data: null,
-                    },
-                })
-            );
-            return res.status(400).json({
-                status: 1,
-                message: "Invalid Password",
-                data: null,
-            });
-        }
-
-        const [rows] = await getUserLoginModel(username, btoa(password));
-
-        if (rows?.length !== 0) {
-            const token = jwt.sign(
-                {
-                    UserID: rows["UserID"],
-                    DistrictID: rows["DistrictID"],
-                    DistrictName: rows["DistrictName"],
-                    PoliceStationID: rows["PoliceStationID"],
-                    PoliceStationName: rows["PoliceStationName"],
-                    UserTypeID: rows["UserTypeID"],
-                    UserTypeName: rows["UserTypeName"],
-                    Username: rows["Username"],
-                    UserFullName: rows["UserFullName"]
-                },
-                JWT_SECRET,
-                { expiresIn: "24h" }
-            );
-            console.log("rowsUserID", rows["UserID"]);
-
-            const [result] = await updateAuthToken(rows["UserID"], token, "");
-
-            res.cookie('data', token);
-            res.cookie('type', rows["UserTypeID"]);
-            res.cookie('name', rows["UserFullName"]);
-            res.cookie('district', rows["DistrictName"]);
-            res.cookie('ps', rows["PoliceStationName"]);
-
-            console.log("token", token);
-
-            logger.debug(
-                JSON.stringify({
-                    API: "sendOtp",
-                    REQUEST: { username, password },
-                    RESPONSE: {
-                        status: 0,
-                        message: "OTP sent successfully",
-                        type: rows["UserTypeID"],
-                        name: rows["UserFullName"],
-                        district: rows["DistrictName"],
-                        ps: rows["PoliceStationName"],
-                        token: token,
-                    },
-                })
-            );
-
-            res.status(200).json({
-                status: 0,
-                message: "OTP sent successfully",
-                type: rows["UserTypeID"],
-                name: rows["UserFullName"],
-                district: rows["DistrictName"],
-                ps: rows["PoliceStationName"],
-                token: token,
-            });
-
-        } else {
-            logger.error(error.message);
-            return res.status(404).json({
-                status: 1,
-                message: "Invalid user.",
-                data: null,
-            });
-        }
-
-    } catch (error) {
-        logger.error(error.message);
-
-        return res.status(500).json({
-            status: 1,
-            message: "An error occurred, Please try again",
-            data: null,
-        });
+      // sending api response to client
+      return res.status(400).json({
+        success: false,
+        message: "Invalid username or password",
+        data: null,
+      });
     }
+
+    // check if user is authenticated
+    const rows = await userLoginModel(username, btoa(password));
+
+    if (rows !== undefined && rows[0]?.length !== 0) {
+      // debug logging
+      logger.debug(
+        JSON.stringify({
+          API: "login",
+          REQUEST: { username, password },
+          RESPONSE: {
+            success: true,
+            message: "Login successfully",
+            data: rows[0],
+          },
+        })
+      );
+
+      // sending api response to client
+      res.status(200).json({
+        success: true,
+        message: "Login successfully",
+        data: rows[0],
+      });
+    } else {
+      // if user not authenticated
+      return res.status(400).json({
+        success: false,
+        message: "Invalid username or password",
+      });
+    }
+  } catch (error) {
+    // error logging
+    logger.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred, Please try again",
+      data: null,
+    });
+  }
 };
 
-export const verifyOtp = async (req, res) => {
-    try {
-        const { otp } = req.body;
+export const logout = async (req, res) => {
+  try {
+    // get user from req
+    const { user_id } = req.body;
+    console.log("logged out",user_id);
+    
+    // log out model call
+    await userLogoutModel(user_id);
 
-        console.log('otp', otp);
-        if (!otp) {
-            logger.debug(
-                JSON.stringify({
-                    API: "verifyOtp",
-                    REQUEST: { otp },
-                    RESPONSE: {
-                        status: 1,
-                        message: "Invalid OTP"
-                    },
-                })
-            );
-            return res.status(400).json({
-                status: 1,
-                message: "Invalid OTP"
-            });
-        }
-
-
-
-        if (otp == '999999') {
-            logger.debug(
-                JSON.stringify({
-                    API: "verifyOtp",
-                    REQUEST: { otp },
-                    RESPONSE: {
-                        status: 0,
-                        message: "OTP has been verified successfully"
-                    },
-                })
-            );
-            return res.status(200).json({
-                status: 0,
-                message: "OTP has been verified successfully",
-            });
-        }
-        const otpStatus = true;
-
-        if (otpStatus) {
-            logger.debug(
-                JSON.stringify({
-                    API: "verifyOtp",
-                    REQUEST: { otp },
-                    RESPONSE: {
-                        status: 0,
-                        message: "OTP has been verified successfully",
-                    },
-                })
-            );
-            return res.status(200).json({
-                status: 0,
-                message: "OTP has been verified successfully",
-            });
-        } else {
-            logger.debug(
-                JSON.stringify({
-                    API: "verifyOtp",
-                    REQUEST: { otp },
-                    RESPONSE: {
-                        status: 1,
-                        message: "Failed to verify OTP",
-                    },
-                })
-            );
-            return res.status(400).json({
-                status: 1,
-                message: "Failed to verify OTP",
-            });
-        }
-
-    } catch (error) {
-        logger.error(error.message);
-
-        return res.status(500).json({
-            status: 1,
-            message: "An error occurred, Please try again",
-            data: null,
-        });
-    }
+    // debug logging
+    logger.debug(
+      JSON.stringify({
+        API: "logout",
+        REQUEST: user_id,
+        RESPONSE: {
+          success: true,
+          message: "Logout successfully",
+        },
+      })
+    );
+    // sending api response to client
+    res.status(200).json({
+      success: true,
+      message: "Logout successfully",
+    });
+  } catch (error) {
+    // error logging
+    logger.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred, Please try again",
+      data: null,
+    });
+  }
 };
