@@ -68,7 +68,7 @@ export const insertProperty = async (req, res) => {
 
       // sending api response to client
       return res.status(400).json({
-        success: true,
+        success: false,
         message: "Invalid Input Parameter(s)",
         data: null,
       });
