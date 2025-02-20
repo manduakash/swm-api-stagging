@@ -4,6 +4,7 @@ import logger from "../utils/logger.js";
 export const insertProperty = async (req, res) => {
   try {
     const {
+      UniqueNumber,
       PropertyTypeID,
       PropertyName,
       PropertyAddress,
@@ -11,6 +12,7 @@ export const insertProperty = async (req, res) => {
       DistrictID,
       BlockID,
       GPID,
+      VillageID,
       PropertyNumber,
       LandMark,
       Latitude,
@@ -22,6 +24,7 @@ export const insertProperty = async (req, res) => {
 
     if (
       !(
+        UniqueNumber &&
         PropertyTypeID &&
         PropertyName &&
         PropertyAddress &&
@@ -29,6 +32,7 @@ export const insertProperty = async (req, res) => {
         DistrictID &&
         BlockID &&
         GPID &&
+        VillageID &&
         PropertyNumber &&
         LandMark &&
         Latitude &&
@@ -44,6 +48,7 @@ export const insertProperty = async (req, res) => {
         JSON.stringify({
           API: "insertProperty",
           REQUEST: {
+            UniqueNumber,
             PropertyTypeID,
             PropertyName,
             PropertyAddress,
@@ -51,6 +56,7 @@ export const insertProperty = async (req, res) => {
             DistrictID,
             BlockID,
             GPID,
+            VillageID,
             PropertyNumber,
             LandMark,
             Latitude,
@@ -68,7 +74,7 @@ export const insertProperty = async (req, res) => {
 
       // sending api response to client
       return res.status(400).json({
-        success: false,
+        success: true,
         message: "Invalid Input Parameter(s)",
         data: null,
       });
@@ -76,6 +82,7 @@ export const insertProperty = async (req, res) => {
 
     // calling model method
     const result = await insertPropertyModel(
+      UniqueNumber,
       PropertyTypeID,
       PropertyName,
       PropertyAddress,
@@ -83,6 +90,7 @@ export const insertProperty = async (req, res) => {
       DistrictID,
       BlockID,
       GPID,
+      VillageID,
       PropertyNumber,
       LandMark,
       Latitude,
@@ -99,6 +107,7 @@ export const insertProperty = async (req, res) => {
         JSON.stringify({
           API: "insertProperty",
           REQUEST: {
+            UniqueNumber,
             PropertyTypeID,
             PropertyName,
             PropertyAddress,
@@ -106,6 +115,7 @@ export const insertProperty = async (req, res) => {
             DistrictID,
             BlockID,
             GPID,
+            VillageID,
             PropertyNumber,
             LandMark,
             Latitude,
@@ -132,6 +142,7 @@ export const insertProperty = async (req, res) => {
         JSON.stringify({
           API: "insertProperty",
           REQUEST: {
+            UniqueNumber,
             PropertyTypeID,
             PropertyName,
             PropertyAddress,
@@ -139,6 +150,7 @@ export const insertProperty = async (req, res) => {
             DistrictID,
             BlockID,
             GPID,
+            VillageID,
             PropertyNumber,
             LandMark,
             Latitude,

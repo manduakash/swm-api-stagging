@@ -1,6 +1,7 @@
 import pool from "../db.js";
 
 export async function insertPropertyModel(
+  UniqueNumber,
   PropertyTypeID,
   PropertyName,
   PropertyAddress,
@@ -8,6 +9,7 @@ export async function insertPropertyModel(
   DistrictID,
   BlockID,
   GPID,
+  VillageID,
   PropertyNumber,
   LandMark,
   Latitude,
@@ -18,8 +20,9 @@ export async function insertPropertyModel(
 ) {
   try {
     const [rows] = await pool.query(
-      "CALL InsertProperty(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+      "CALL InsertProperty(?, ?, ?, ?, ?, ?,?,?, ?, ?, ?, ?, ?, ?, ?, ?);",
       [
+        UniqueNumber,
         PropertyTypeID,
         PropertyName,
         PropertyAddress,
@@ -27,6 +30,7 @@ export async function insertPropertyModel(
         DistrictID,
         BlockID,
         GPID,
+        VillageID,
         PropertyNumber,
         LandMark,
         Latitude,
