@@ -20,3 +20,27 @@ export async function insertWasteCollectionModel(
     return null;
   }
 }
+
+
+
+export async function getWasteManagementDashboardModel(
+  StateID ,
+  DistrictID ,
+  BlockID ,
+  GPID 
+) {
+  try {
+    const [[rows]] = await pool.query("CALL GetWasteManagementDashboard(?, ?, ?, ?);", [
+      StateID ,
+      DistrictID ,
+      BlockID ,
+      GPID ,
+    ]);
+  
+
+    return rows;
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+}
