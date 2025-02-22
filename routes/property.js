@@ -1,9 +1,9 @@
 import express from "express";
-import { insertProperty, getPropertyByUniqueNumberModel } from "../controllers/propertyController.js";
+import { insertProperty, getPropertyByUniqueNumber } from "../controllers/propertyController.js";
 
 const router = express.Router();
 
 router.post('/insertProperty', insertProperty);
-router.post('/getPropertyByUniqueNumberModel', getPropertyByUniqueNumberModel);
+router.post('/getPropertyByUniqueNumberModel', getPropertyByUniqueNumber);
 
 export default router;
