@@ -15,7 +15,7 @@ export async function saveAttendanceModel(
 
     // Fetch the output parameter `@p_ErrorCode`
     const [[errorResult]] = await pool.query(
-      "SELECT @p_ErrorCode as ErrorCode and @p_Message as Message;"
+      "SELECT @p_ErrorCode as ErrorCode, @p_Message as Message;"
     );
 
     return (
