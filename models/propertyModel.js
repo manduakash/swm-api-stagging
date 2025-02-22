@@ -47,3 +47,16 @@ export async function insertPropertyModel(
     return null;
   }
 }
+
+export async function getPropertyByUniqueNumberModel(UniqueNumber) {
+  try {
+    const [[rows]] = await pool.query("CALL GetPropertyByUniqueNumber(?);", [
+      UniqueNumber,
+    ]);
+
+    return rows;
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+}

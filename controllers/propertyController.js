@@ -1,4 +1,4 @@
-import { insertPropertyModel } from "../models/propertyModel.js";
+import { insertPropertyModel, getPropertyByUniqueNumberModel } from "../models/propertyModel.js";
 import logger from "../utils/logger.js";
 
 export const insertProperty = async (req, res) => {
@@ -180,3 +180,70 @@ export const insertProperty = async (req, res) => {
     });
   }
 };
+
+import { getPropertyByUniqueNumberModel } from "../models/propertyModel.js";
+import logger from "../utils/logger.js";
+
+export const getPropertyByUniqueNumber = async (req, res) => {
+  try {
+    const { UniqueNumber } = req.body; // Get input from request
+
+    // Validate required input
+    if (!UniqueNumber) {
+      logger.debug(
+        JSON.stringify({
+          API: "getPropertyByUniqueNumber",
+          REQUEST: { UniqueNumber },
+          RESPONSE: { success: false, message: "Invalid Input Parameters" },
+        })
+      );
+
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Input Parameter(s)",
+        data: null,
+      });
+    }
+
+    // Call model function
+    const result = await getPropertyByUniqueNumberModel(UniqueNumber);
+
+    if (result && result.length > 0) {
+      logger.debug(
+        JSON.stringify({
+          API: "getPropertyByUniqueNumber",
+          REQUEST: { UniqueNumber },
+          RESPONSE: { success: true, message: "Data fetched successfully" },
+        })
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: "Data fetched successfully",
+        data: result,
+      });
+    } else {
+      logger.debug(
+        JSON.stringify({
+          API: "getPropertyByUniqueNumber",
+          REQUEST: { UniqueNumber },
+          RESPONSE: { success: false, message: "No record found" },
+        })
+      );
+
+      return res.status(404).json({
+        success: false,
+        message: "No record found",
+        data: [],
+      });
+    }
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred, Please try again",
+      data: null,
+    });
+  }
+};
+
