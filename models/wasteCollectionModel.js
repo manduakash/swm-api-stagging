@@ -76,3 +76,21 @@ export async function getPropertiesWithWasteCollectionModel(
     return null;
   }
 }
+
+
+
+export async function getEmployeeAttendanceModel(
+  Status
+) {
+  try {
+    const [[rows]] = await pool.query("CALL GetEmployeeAttendance(?);", [
+      Status
+    ]);
+  
+
+    return rows;
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+}
