@@ -1,9 +1,13 @@
-import { insertWasteCollectionModel, getWasteManagementDashboardModel } from "../models/wasteCollectionModel.js";
+import {
+  insertWasteCollectionModel,
+  getWasteManagementDashboardModel,
+} from "../models/wasteCollectionModel.js";
 import logger from "../utils/logger.js";
 
 export const insertWasteCollection = async (req, res) => {
   try {
-    const { UniqueNumber, UserID, WasteType, WasteAmount } = req.body; // get input from request
+    const { UniqueNumber, UserID, WasteType, WasteAmount, Photo, Remarks } =
+      req.body; // get input from request
 
     if (!(UniqueNumber && UserID && WasteType && WasteAmount)) {
       // if input not provided
@@ -16,6 +20,8 @@ export const insertWasteCollection = async (req, res) => {
             UserID,
             WasteType,
             WasteAmount,
+            Photo,
+            Remarks,
           },
           RESPONSE: {
             success: false,
@@ -37,7 +43,9 @@ export const insertWasteCollection = async (req, res) => {
       UniqueNumber,
       UserID,
       WasteType,
-      WasteAmount
+      WasteAmount,
+      Photo,
+      Remarks
     );
 
     if (result) {
@@ -51,6 +59,8 @@ export const insertWasteCollection = async (req, res) => {
             UserID,
             WasteType,
             WasteAmount,
+            Photo,
+            Remarks,
           },
           RESPONSE: {
             success: false,
@@ -74,6 +84,8 @@ export const insertWasteCollection = async (req, res) => {
             UserID,
             WasteType,
             WasteAmount,
+            Photo,
+            Remarks,
           },
           RESPONSE: {
             success: false,
@@ -97,21 +109,16 @@ export const insertWasteCollection = async (req, res) => {
   }
 };
 
-
-
-
 export const getWasteManagementDashboard = async (req, res) => {
   try {
-    const { StateID , DistrictID , BlockID , GPID } = req.body; // get input from request
-
-    
+    const { StateID, DistrictID, BlockID, GPID } = req.body; // get input from request
 
     // calling model method
     const result = await getWasteManagementDashboardModel(
-      StateID ,
+      StateID,
       DistrictID,
       BlockID,
-      GPID 
+      GPID
     );
 
     if (result) {
@@ -121,10 +128,10 @@ export const getWasteManagementDashboard = async (req, res) => {
         JSON.stringify({
           API: "GetWasteManagementDashboard",
           REQUEST: {
-            StateID ,
-            DistrictID ,
+            StateID,
+            DistrictID,
             BlockID,
-            GPID ,
+            GPID,
           },
           RESPONSE: {
             success: false,
@@ -145,10 +152,10 @@ export const getWasteManagementDashboard = async (req, res) => {
         JSON.stringify({
           API: "GetWasteManagementDashboard",
           REQUEST: {
-            StateID ,
-            DistrictID ,
-            BlockID ,
-            GPID ,
+            StateID,
+            DistrictID,
+            BlockID,
+            GPID,
           },
           RESPONSE: {
             success: false,
@@ -159,7 +166,7 @@ export const getWasteManagementDashboard = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "No record found",
-        data: []
+        data: [],
       });
     }
   } catch (error) {

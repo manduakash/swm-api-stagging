@@ -4,14 +4,18 @@ export async function insertWasteCollectionModel(
   UniqueNumber,
   UserID,
   WasteType,
-  WasteAmount
+  WasteAmount,
+  Photo,
+  Remarks,
 ) {
   try {
-    const [rows] = await pool.query("CALL InsertWasteCollection(?, ?, ?, ?);", [
+    const [rows] = await pool.query("CALL InsertWasteCollection(?, ?, ?, ?, ?, ?);", [
       UniqueNumber,
       UserID,
       WasteType,
       WasteAmount,
+      Photo,
+      Remarks,
     ]);
 
     return rows?.affectedRows;
