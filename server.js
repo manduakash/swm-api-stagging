@@ -12,6 +12,7 @@ import masterRoute from "./routes/master.js";
 import propertyRoute from "./routes/property.js";
 import wasteCollectionRoute from "./routes/wasteCollection.js";
 import userRoute from "./routes/user.js";
+import attendanceRoute from "./routes/attendance.js";
 
 const app = express();
 // env variables
@@ -44,6 +45,7 @@ app.use("/api/master", masterRoute);
 app.use("/api/property", propertyRoute);
 app.use("/api/wasteCollection", wasteCollectionRoute);
 app.use("/api/user", userRoute);
+app.use("/api/attendance", attendanceRoute);
 
 // test route
 app.use("/test", (req, res) => {
