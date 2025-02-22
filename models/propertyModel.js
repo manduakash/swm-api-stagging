@@ -60,3 +60,27 @@ export async function getPropertyByUniqueNumberModel(UniqueNumber) {
     return null;
   }
 }
+
+
+
+export async function getPropertiesModel(
+  StateID ,
+  DistrictID ,
+  BlockID ,
+  GPID 
+) {
+  try {
+    const [[rows]] = await pool.query("CALL GetProperties(?, ?, ?, ?);", [
+      StateID ,
+      DistrictID ,
+      BlockID ,
+      GPID ,
+    ]);
+  
+
+    return rows;
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+}
