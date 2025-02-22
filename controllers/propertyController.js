@@ -181,9 +181,6 @@ export const insertProperty = async (req, res) => {
   }
 };
 
-import { getPropertyByUniqueNumberModel } from "../models/propertyModel.js";
-import logger from "../utils/logger.js";
-
 export const getPropertyByUniqueNumber = async (req, res) => {
   try {
     const { UniqueNumber } = req.body; // Get input from request
@@ -220,7 +217,7 @@ export const getPropertyByUniqueNumber = async (req, res) => {
       return res.status(200).json({
         success: true,
         message: "Data fetched successfully",
-        data: result,
+        data: result?.[0],
       });
     } else {
       logger.debug(
@@ -234,7 +231,7 @@ export const getPropertyByUniqueNumber = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "No record found",
-        data: [],
+        data: null,
       });
     }
   } catch (error) {
