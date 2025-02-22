@@ -48,3 +48,31 @@ export async function getWasteManagementDashboardModel(
     return null;
   }
 }
+
+
+
+export async function getPropertiesWithWasteCollectionModel(
+  StateID ,
+  DistrictID ,
+  BlockID ,
+  GPID ,
+  StartDate,
+  EndDate 
+) {
+  try {
+    const [[rows]] = await pool.query("CALL GetPropertiesWithWasteCollection(?, ?, ?, ?,?,?);", [
+      StateID ,
+      DistrictID ,
+      BlockID ,
+      GPID ,
+      StartDate,
+      EndDate
+    ]);
+  
+
+    return rows;
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+}
