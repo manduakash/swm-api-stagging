@@ -48,6 +48,27 @@ export async function getWasteManagementDashboardModel(
     return null;
   }
 }
+export async function getWasteCollectionSummaryModel(
+  StateID ,
+  DistrictID ,
+  BlockID ,
+  GPID 
+) {
+  try {
+    const [[rows]] = await pool.query("CALL GetWasteCollectionSummary(?, ?, ?, ?);", [
+      StateID ,
+      DistrictID ,
+      BlockID ,
+      GPID ,
+    ]);
+  
+
+    return rows;
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+}
 
 
 
@@ -85,6 +106,32 @@ export async function getEmployeeAttendanceModel(
   try {
     const [[rows]] = await pool.query("CALL GetEmployeeAttendance(?);", [
       Status
+    ]);
+  
+
+    return rows;
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+}
+
+
+
+export async function getWasteCollectionDataModel(
+  StateID ,
+  DistrictID ,
+  BlockID ,
+  GPID ,
+  WasteType 
+) {
+  try {
+    const [[rows]] = await pool.query("CALL GetWasteCollectionData(?, ?, ?, ?,?);", [
+      StateID ,
+      DistrictID ,
+      BlockID ,
+      GPID ,
+      WasteType 
     ]);
   
 

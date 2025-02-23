@@ -1,8 +1,10 @@
 import {
   insertWasteCollectionModel,
   getWasteManagementDashboardModel,
+  getWasteCollectionSummaryModel,
   getPropertiesWithWasteCollectionModel,
   getEmployeeAttendanceModel,
+  getWasteCollectionDataModel,
 } from "../models/wasteCollectionModel.js";
 import logger from "../utils/logger.js";
 
@@ -115,7 +117,7 @@ export const getWasteManagementDashboard = async (req, res) => {
   try {
     const { StateID, DistrictID, BlockID, GPID } = req.body; // get input from request
 
-    // calling model method
+    // calling model method for waste management data
     const result = await getWasteManagementDashboardModel(
       StateID,
       DistrictID,
@@ -124,8 +126,7 @@ export const getWasteManagementDashboard = async (req, res) => {
     );
 
     if (result) {
-      // in inserted
-      // debug logging
+      // debug logging for success scenario
       logger.debug(
         JSON.stringify({
           API: "GetWasteManagementDashboard",
@@ -136,20 +137,31 @@ export const getWasteManagementDashboard = async (req, res) => {
             GPID,
           },
           RESPONSE: {
-            success: false,
-            message: "Data saved successfully",
+            success: true,
+            message: "Data fetched successfully",
           },
         })
       );
 
+      // calling model method for chart data
+      const chartData = await getWasteCollectionSummaryModel(
+        StateID,
+        DistrictID,
+        BlockID,
+        GPID
+      );
+
       // sending api response to client
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         message: "Data fetched successfully",
-        data: result || [],
+        data: {
+          dashboard: result[0],        // First data model
+          chartData: chartData[0],     // Chart data model
+        },
       });
     } else {
-      // debug logging
+      // debug logging for no result scenario
       logger.debug(
         JSON.stringify({
           API: "GetWasteManagementDashboard",
@@ -161,7 +173,7 @@ export const getWasteManagementDashboard = async (req, res) => {
           },
           RESPONSE: {
             success: false,
-            message: "Failed to save data",
+            message: "Failed to fetch data",
           },
         })
       );
@@ -171,6 +183,7 @@ export const getWasteManagementDashboard = async (req, res) => {
         data: [],
       });
     }
+    
   } catch (error) {
     // error logging
     logger.error(error.message);
@@ -297,6 +310,82 @@ export const getEmployeeAttendance = async (req, res) => {
           API: "GetEmployeeAttendance",
           REQUEST: {
             Status
+          },
+          RESPONSE: {
+            success: false,
+            message: "Failed to save data",
+          },
+        })
+      );
+      return res.status(400).json({
+        success: false,
+        message: "No record found",
+        data: [],
+      });
+    }
+  } catch (error) {
+    // error logging
+    logger.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred, Please try again",
+      data: [],
+    });
+  }
+};
+
+
+
+export const getWasteCollectionData = async (req, res) => {
+  try {
+    const { StateID, DistrictID, BlockID, GPID, WasteType} = req.body; // get input from request
+
+    // calling model method
+    const result = await getWasteCollectionDataModel(
+      StateID,
+      DistrictID,
+      BlockID,
+      GPID,
+      WasteType 
+    );
+
+    if (result) {
+      // in inserted
+      // debug logging
+      logger.debug(
+        JSON.stringify({
+          API: "GetWasteCollectionData",
+          REQUEST: {
+            StateID,
+            DistrictID,
+            BlockID,
+            GPID,
+            WasteType 
+          },
+          RESPONSE: {
+            success: false,
+            message: "Data saved successfully",
+          },
+        })
+      );
+
+      // sending api response to client
+      res.status(200).json({
+        success: true,
+        message: "Data fetched successfully",
+        data: result || [],
+      });
+    } else {
+      // debug logging
+      logger.debug(
+        JSON.stringify({
+          API: "GetWasteCollectionData",
+          REQUEST: {
+            StateID,
+            DistrictID,
+            BlockID,
+            GPID,
+            WasteType 
           },
           RESPONSE: {
             success: false,
