@@ -70,8 +70,6 @@ export async function getWasteCollectionSummaryModel(
   }
 }
 
-
-
 export async function getPropertiesWithWasteCollectionModel(
   StateID ,
   DistrictID ,
@@ -98,8 +96,6 @@ export async function getPropertiesWithWasteCollectionModel(
   }
 }
 
-
-
 export async function getEmployeeAttendanceModel(
   Status
 ) {
@@ -116,8 +112,6 @@ export async function getEmployeeAttendanceModel(
   }
 }
 
-
-
 export async function getWasteCollectionDataModel(
   StateID ,
   DistrictID ,
@@ -132,6 +126,29 @@ export async function getWasteCollectionDataModel(
       BlockID ,
       GPID ,
       WasteType 
+    ]);
+  
+
+    return rows;
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+}
+
+
+export async function getWasteCollectionStatsModel(
+  StateID ,
+  DistrictID ,
+  BlockID ,
+  GPID 
+) {
+  try {
+    const [[rows]] = await pool.query("CALL GetWasteCollectionStats(?, ?, ?, ?);", [
+      StateID ,
+      DistrictID ,
+      BlockID ,
+      GPID 
     ]);
   
 
