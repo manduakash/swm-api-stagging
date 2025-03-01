@@ -9,4 +9,5 @@ router.post('/getPropertiesWithWasteCollection', getPropertiesWithWasteCollectio
 router.post('/getEmployeeAttendance', getEmployeeAttendance);
 router.post('/getWasteCollectionData', getWasteCollectionData);
 router.post('/getWasteCollectionStats', getWasteCollectionStats);
+
 export default router;
