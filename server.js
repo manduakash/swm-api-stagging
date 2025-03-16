@@ -14,6 +14,7 @@ import wasteCollectionRoute from "./routes/wasteCollection.js";
 import userRoute from "./routes/user.js";
 import attendanceRoute from "./routes/attendance.js";
 import getBlockWiseWasteCollection from "./routes/blockwise.js";
+import insertWasteFacility from "./routes/wasteFacilityRoutes.js";
 
 const app = express();
 // env variables
@@ -48,6 +49,7 @@ app.use("/api/wasteCollection", wasteCollectionRoute);
 app.use("/api/user", userRoute);
 app.use("/api/attendance", attendanceRoute);
 app.use("/api/blockwise",getBlockWiseWasteCollection)
+app.use("/api/insert",insertWasteFacility)
 // test route
 app.use("/test", (req, res) => {
   res.send("api running...");

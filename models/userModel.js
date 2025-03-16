@@ -37,3 +37,48 @@ export async function createUserModel(
     return null;
   }
 }
+
+
+
+
+
+export async function insertGrantAuthorizationModal(
+    UserID,
+    NameOfApplicant,
+    WasteManagementFacilitieID,
+    AuthorizationNumber,
+    ValidityStartDate,
+    ValidityEndDate,
+    WasteManagementGuidelinesCompliance,
+    EnvironmentalSafetyRequirements,
+    ApprovingAuthorityName,
+    ApprovingAuthorityDesignation
+) {
+    try {
+        const [resultSets] = await pool.query(
+            `CALL InsertGrantAuthorization(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+            [
+                UserID,
+                NameOfApplicant,
+                WasteManagementFacilitieID,
+                AuthorizationNumber,
+                ValidityStartDate,
+                ValidityEndDate,
+                WasteManagementGuidelinesCompliance,
+                EnvironmentalSafetyRequirements,
+                ApprovingAuthorityName,
+                ApprovingAuthorityDesignation
+            ]
+        );
+        
+        // Extract the first result set which contains ErrorCode
+        const errorCode = resultSets[0][0]?.ErrorCode;
+        console.log("errorCode",errorCode);
+        
+        return errorCode;
+    } catch (error) {
+        console.error("Error inserting grant authorization:", error.message);
+        return null;
+    }
+}
+

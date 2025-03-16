@@ -6,6 +6,8 @@ import {
   getEmployeeAttendanceModel,
   getWasteCollectionDataModel,
   getWasteCollectionStatsModel,
+  getWasteManagementFacilitiesModel,
+ 
 } from "../models/wasteCollectionModel.js";
 import logger from "../utils/logger.js";
 
@@ -485,3 +487,56 @@ export const getWasteCollectionStats = async (req, res) => {
     });
   }
 };
+
+
+export const getWasteManagementFacilities = async (req, res) => {
+  try {
+    const { StateID, DistrictID, BlockID } = req.body; 
+
+  
+    const result = await getWasteManagementFacilitiesModel(StateID, DistrictID, BlockID);
+
+    if (result && result.length > 0) {
+ 
+      logger.debug(
+        JSON.stringify({
+          API: "GetWasteManagementFacilities",
+          REQUEST: { StateID, DistrictID, BlockID },
+          RESPONSE: { success: true, message: "Data fetched successfully" },
+        })
+      );
+      
+      res.status(200).json({
+        success: true,
+        message: "Data fetched successfully",
+        data: result,
+      });
+    } else {
+      
+      logger.debug(
+        JSON.stringify({
+          API: "GetWasteManagementFacilities",
+          REQUEST: { StateID, DistrictID, BlockID },
+          RESPONSE: { success: false, message: "No records found" },
+        })
+      );
+
+      res.status(200).json({
+        success: false,
+        message: "No records found",
+        data: result[0],
+      });
+    }
+  } catch (error) {
+   
+    logger.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred, Please try again",
+      data: [],
+    });
+  }
+};
+
+
+

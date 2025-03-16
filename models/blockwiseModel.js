@@ -69,3 +69,25 @@ export async function getBlockWiseWasteCollectionModel(
       return null;
     }
   }
+
+
+
+  
+  export async function getGrantAuthorizationModel(
+    WasteManagementFacilitieID ,
+    UserID
+   
+  ) {
+    try {
+      const [[rows]] = await pool.query("CALL GetGrantAuthorization(?, ?);", [
+        WasteManagementFacilitieID,
+        UserID
+      ]);
+    
+  
+      return rows;
+    } catch (e) {
+      console.log(e.message);
+      return null;
+    }
+  }

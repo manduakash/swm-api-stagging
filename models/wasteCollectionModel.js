@@ -158,3 +158,28 @@ export async function getWasteCollectionStatsModel(
     return null;
   }
 }
+
+export async function getWasteManagementFacilitiesModel(StateID, DistrictID, BlockID) {
+  try {
+    const [results] = await pool.query("CALL GetWasteManagementFacilities(?, ?, ?);", [
+      StateID,
+      DistrictID,
+      BlockID,
+    ]);
+    console.log("StateID",StateID)
+    console.log("DistrictID",DistrictID)
+    console.log("BlockID",BlockID)
+    console.log("results",results);
+    
+    if (results && Array.isArray(results) && results.length > 0) {
+      return results[0]; 
+    } else {
+      return []; 
+    }
+  } catch (e) {
+    console.error("Error in fetching waste management facilities:", e.message);
+    return null;
+  }
+}
+
+
