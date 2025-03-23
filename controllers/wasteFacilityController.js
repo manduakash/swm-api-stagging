@@ -128,15 +128,15 @@ export const InsertAnnualReportOperator = async (req, res) => {
             "DistrictID",
             "BlockID",
             "GPID",
-            "FacilityName ",
-            "LocationContactDetails ",
-            "ProcessingFacilityType ",
-            "WasteHandledAnnually ",
-            "WasteProcessedType ",
-            "ProcessingTechnology ",
-            "PollutionControlMeasures ",
-            "EnvironmentalImpactReports ",
-            "AuthoritySignature "
+            "FacilityName",
+            "LocationContactDetails",
+            "ProcessingFacilityType",
+            "WasteHandledAnnually",
+            "WasteProcessedType",
+            "ProcessingTechnology",
+            "PollutionControlMeasures",
+            "EnvironmentalImpactReports",
+            "AuthoritySignature"
         ];
 
         for (let field of requiredFields) {

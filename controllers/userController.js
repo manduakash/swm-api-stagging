@@ -68,6 +68,7 @@ export const createUser = async (req, res) => {
       GPID,
       CreatedBy
     );
+console.log("result", result);
 
     if (result === 0) {
       // If user creation was successful
