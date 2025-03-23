@@ -23,9 +23,6 @@ export const createUser = async (req, res) => {
         FullName &&
         UserTypeID &&
         StateID &&
-        DistrictID &&
-        BlockID &&
-        GPID &&
         CreatedBy
       )
     ) {
