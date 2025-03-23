@@ -138,3 +138,51 @@ export async function InsertAnnualReportModel(data) {
         return { success: false, message: "Database error", error: error.message };
     }
 }
+
+
+
+
+export async function InsertAnnualReportOperatorModel(data) {
+    try {
+        const connection = await pool.getConnection();
+        try {
+            // Initialize error code variable
+            await connection.query(`SET @errorCode = 0;`);
+
+            // Execute stored procedure with OUT parameter
+            await connection.query(
+                `CALL InsertAnnualReportOperator(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @errorCode);`,
+                [
+                    data.StateID,
+                    data.DistrictID,
+                    data.BlockID,
+                    data.GPID,
+                    data.FacilityName,
+                    data.LocationContactDetails,
+                    data.ProcessingFacilityType,
+                    data.WasteHandledAnnually,
+                    data.WasteProcessedType,
+                    data.ProcessingTechnology,
+                    data.PollutionControlMeasures,
+                    data.EnvironmentalImpactReports,
+                    data.AuthoritySignature
+                ]
+            );
+
+            // Retrieve the error code
+            const [result] = await connection.query(`SELECT @errorCode AS ErrorCode;`);
+            const errorCode = result[0]?.ErrorCode;
+
+            if (errorCode === 0) {
+                return { success: true, message: "Annual report inserted successfully" };
+            } else {
+                return { success: false, message: "Failed to insert annual report", errorCode };
+            }
+        } finally {
+            connection.release(); // Release connection back to the pool
+        }
+    } catch (error) {
+        console.error("Error inserting annual report:", error.message);
+        return { success: false, message: "Database error", error: error.message };
+    }
+}
