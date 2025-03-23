@@ -74,7 +74,7 @@ export async function getBlockWiseWasteCollectionModel(
 
   
   export async function getGrantAuthorizationModel(
-    WasteManagementFacilitieID ,
+    WasteManagementFacilitieID  ,
     UserID
    
   ) {

@@ -227,7 +227,7 @@ export const getBlockWiseWasteCollection = async (req, res) => {
 
   export const getGrantAuthorization = async (req, res) => {
     try {
-      const { WasteManagementFacilitieID , UserID} = req.body; // get input from request
+      const { WasteManagementFacilitieID  , UserID} = req.body; // get input from request
   
       // calling model method
       const result = await getGrantAuthorizationModel(

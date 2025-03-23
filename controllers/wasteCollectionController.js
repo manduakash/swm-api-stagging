@@ -7,6 +7,8 @@ import {
   getWasteCollectionDataModel,
   getWasteCollectionStatsModel,
   getWasteManagementFacilitiesModel,
+  getAccidentReportsModel,
+  getAnnualReportsModel,
  
 } from "../models/wasteCollectionModel.js";
 import logger from "../utils/logger.js";
@@ -539,4 +541,95 @@ export const getWasteManagementFacilities = async (req, res) => {
 };
 
 
+export const getAccidentReports = async (req, res) => {
+  try {
+    const { StateID, DistrictID, BlockID, GPID, AccidentID } = req.body; // Extract parameters from request body
 
+    // Call the model function to get accident reports
+    const result = await getAccidentReportsModel(StateID, DistrictID, BlockID, GPID, AccidentID);
+
+    if (result && result.length > 0) {
+      logger.debug(
+        JSON.stringify({
+          API: "GetAccidentReports",
+          REQUEST: { StateID, DistrictID, BlockID, GPID, AccidentID },
+          RESPONSE: { success: true, message: "Data fetched successfully" },
+        })
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Data fetched successfully",
+        data: result,
+      });
+    } else {
+      logger.debug(
+        JSON.stringify({
+          API: "GetAccidentReports",
+          REQUEST: { StateID, DistrictID, BlockID, GPID, AccidentID },
+          RESPONSE: { success: false, message: "No records found" },
+        })
+      );
+
+      res.status(200).json({
+        success: false,
+        message: "No records found",
+        data: [],
+      });
+    }
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred, please try again",
+      data: [],
+    });
+  }
+};
+
+
+export const getAnnualReports = async (req, res) => {
+  try {
+    const { StateID, DistrictID, BlockID, GPID, ReportID } = req.body; // Extract parameters from request body
+
+    // Call the model function to get annual reports
+    const result = await getAnnualReportsModel(StateID, DistrictID, BlockID, GPID, ReportID);
+
+    if (result && result.length > 0) {
+      logger.debug(
+        JSON.stringify({
+          API: "GetAnnualReports",
+          REQUEST: { StateID, DistrictID, BlockID, GPID, ReportID },
+          RESPONSE: { success: true, message: "Data fetched successfully" },
+        })
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Data fetched successfully",
+        data: result,
+      });
+    } else {
+      logger.debug(
+        JSON.stringify({
+          API: "GetAnnualReports",
+          REQUEST: { StateID, DistrictID, BlockID, GPID, ReportID },
+          RESPONSE: { success: false, message: "No records found" },
+        })
+      );
+
+      res.status(200).json({
+        success: false,
+        message: "No records found",
+        data: [],
+      });
+    }
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred, please try again",
+      data: [],
+    });
+  }
+};

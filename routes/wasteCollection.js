@@ -1,5 +1,5 @@
 import express from "express";
-import { insertWasteCollection, getWasteManagementDashboard ,getPropertiesWithWasteCollection,getEmployeeAttendance, getWasteCollectionData,getWasteCollectionStats,getWasteManagementFacilities} from "../controllers/wasteCollectionController.js";
+import { insertWasteCollection, getWasteManagementDashboard ,getPropertiesWithWasteCollection,getEmployeeAttendance, getWasteCollectionData,getWasteCollectionStats,getWasteManagementFacilities, getAccidentReports, getAnnualReports} from "../controllers/wasteCollectionController.js";
 
 const router = express.Router();
 
@@ -10,5 +10,7 @@ router.post('/getEmployeeAttendance', getEmployeeAttendance);
 router.post('/getWasteCollectionData', getWasteCollectionData);
 router.post('/getWasteCollectionStats', getWasteCollectionStats);
 router.post('/getWasteManagementFacilities', getWasteManagementFacilities);
+router.post('/getAccidentReports', getAccidentReports);
+router.post('/getAnnualReports', getAnnualReports);
 
 export default router;
