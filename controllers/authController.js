@@ -3,18 +3,18 @@ import logger from "../utils/logger.js";
 
 export const login = async (req, res) => {
   try {
-    const { username, password } = req.body; // get username and password from request
+    const {username, password} = req.body; // get username and password from request
 
-    if (!username || !password) {
+    if (!username  || !password ) {
       // if username or password not provided
       logger.debug(
         // debug logging
         JSON.stringify({
           API: "login",
-          REQUEST: { username, password },
+          REQUEST: {username, password},
           RESPONSE: {
             success: false,
-            message: "Invalid Username or Password",
+            message: "Invalid username or Password",
           },
         })
       );
@@ -28,14 +28,14 @@ export const login = async (req, res) => {
     }
 
     // check if user is authenticated
-    const rows = await userLoginModel(username, btoa(password));
+    const rows = await userLoginModel(username , btoa(password));
 
     if (rows !== undefined && rows[0]?.length !== 0) {
       // debug logging
       logger.debug(
         JSON.stringify({
           API: "login",
-          REQUEST: { username, password },
+          REQUEST: { username , password  },
           RESPONSE: {
             success: true,
             message: "Login successfully",

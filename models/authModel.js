@@ -1,11 +1,11 @@
 import pool from "../db.js";
 import logger from "../utils/logger.js";
 
-export async function userLoginModel(username, password) {
+export async function userLoginModel(Username, PasswordHash) {
   try {
     const [rows] = await pool.query("CALL UserLogin(?, ?)", [
-      username,
-      password,
+      Username,
+      PasswordHash,
     ]);
     return rows[0];
   } catch (error) {
