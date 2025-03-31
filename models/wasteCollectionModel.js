@@ -4,21 +4,28 @@ export async function insertWasteCollectionModel(
   UniqueNumber,
   UserID,
   WasteType,
-  WasteAmount,
+  Organic_WasteAmount,
+  Inorganic_WasteAmount,
   Photo,
   Remarks,
 ) {
+  console.log("insertWasteCollectionModel", UniqueNumber, UserID, WasteType, Organic_WasteAmount, Inorganic_WasteAmount, Photo, Remarks);
+  
   try {
-    const [rows] = await pool.query("CALL InsertWasteCollection(?, ?, ?, ?, ?, ?);", [
+    const [rows] = await pool.query("CALL InsertWasteCollection_v3(?, ?, ?, ?, ?, ?, ?, @p_ErrorCode);", [
       UniqueNumber,
       UserID,
       WasteType,
-      WasteAmount,
+      Organic_WasteAmount,
+      Inorganic_WasteAmount,
       Photo,
       Remarks,
     ]);
 
-    return rows?.affectedRows;
+    // Fetch the output parameter `@p_ErrorCode`
+    const [[errorResult]] = await pool.query("SELECT @p_ErrorCode as ErrorCode");
+
+    return errorResult.ErrorCode; // Return the error code
   } catch (e) {
     console.log(e.message);
     return null;
@@ -226,12 +233,28 @@ export async function getAnnualReportsModel(StateID, DistrictID, BlockID, GPID, 
       ReportID
     ]);
 
-    console.log("StateID:", StateID);
-    console.log("DistrictID:", DistrictID);
-    console.log("BlockID:", BlockID);
-    console.log("GPID:", GPID);
-    console.log("ReportID:", ReportID);
-    console.log("Results:", results);
+    // Ensure results are valid and return the first result set
+    if (results && Array.isArray(results) && results.length > 0) {
+      return results[0];
+    } else {
+      return [];
+    }
+  } catch (e) {
+    console.error("Error in fetching annual reports:", e.message);
+    return null;
+  }
+}
+
+export async function getAnnualReportOperatorModel(StateID, DistrictID, BlockID, GPID, ReportID) {
+  try {
+    // Call the stored procedure with the given parameters
+    const [results] = await pool.query("CALL GetAnnualReportOperator(?, ?, ?, ?, ?);", [
+      StateID,
+      DistrictID,
+      BlockID,
+      GPID,
+      ReportID
+    ]);
 
     // Ensure results are valid and return the first result set
     if (results && Array.isArray(results) && results.length > 0) {
@@ -245,25 +268,17 @@ export async function getAnnualReportsModel(StateID, DistrictID, BlockID, GPID, 
   }
 }
 
-
-
-export async function getAnnualReportOperatorModel(StateID, DistrictID, BlockID, GPID, ReportID) {
+export async function getWasteCollectionReportByDateRangeModel(StartDate, EndDate, StateID, DistrictID, BlockID, GPID) {
   try {
     // Call the stored procedure with the given parameters
-    const [results] = await pool.query("CALL GetAnnualReportOperator(?, ?, ?, ?, ?);", [
+    const [results] = await pool.query("CALL GetWasteCollectionReportByDateRange_v1(?, ?, ?, ?, ?, ?);", [
+      StartDate,
+      EndDate,
       StateID,
       DistrictID,
       BlockID,
-      GPID,
-      ReportID
+      GPID
     ]);
-
-    console.log("StateID:", StateID);
-    console.log("DistrictID:", DistrictID);
-    console.log("BlockID:", BlockID);
-    console.log("GPID:", GPID);
-    console.log("ReportID:", ReportID);
-    console.log("Results:", results);
 
     // Ensure results are valid and return the first result set
     if (results && Array.isArray(results) && results.length > 0) {

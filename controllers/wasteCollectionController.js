@@ -10,16 +10,17 @@ import {
   getAccidentReportsModel,
   getAnnualReportsModel,
   getAnnualReportOperatorModel,
+  getWasteCollectionReportByDateRangeModel,
  
 } from "../models/wasteCollectionModel.js";
 import logger from "../utils/logger.js";
 
 export const insertWasteCollection = async (req, res) => {
   try {
-    const { UniqueNumber, UserID, WasteType, WasteAmount, Photo, Remarks } =
+    const { UniqueNumber , UserID , WasteType ,Organic_WasteAmount,Inorganic_WasteAmount,Photo, Remarks } =
       req.body; // get input from request
 
-    if (!(UniqueNumber && UserID && WasteType && WasteAmount)) {
+    if (!(UniqueNumber && UserID && WasteType && Organic_WasteAmount && Inorganic_WasteAmount)) {
       // if input not provided
       logger.debug(
         // debug logging
@@ -29,7 +30,8 @@ export const insertWasteCollection = async (req, res) => {
             UniqueNumber,
             UserID,
             WasteType,
-            WasteAmount,
+            Organic_WasteAmount,
+            Inorganic_WasteAmount,
             Photo,
             Remarks,
           },
@@ -53,12 +55,13 @@ export const insertWasteCollection = async (req, res) => {
       UniqueNumber,
       UserID,
       WasteType,
-      WasteAmount,
+      Organic_WasteAmount,
+      Inorganic_WasteAmount,
       Photo,
       Remarks
     );
 
-    if (result) {
+    if (result == 0) {
       // in inserted
       // debug logging
       logger.debug(
@@ -68,7 +71,8 @@ export const insertWasteCollection = async (req, res) => {
             UniqueNumber,
             UserID,
             WasteType,
-            WasteAmount,
+            Organic_WasteAmount,
+            Inorganic_WasteAmount,
             Photo,
             Remarks,
           },
@@ -93,7 +97,8 @@ export const insertWasteCollection = async (req, res) => {
             UniqueNumber,
             UserID,
             WasteType,
-            WasteAmount,
+            Organic_WasteAmount,
+            Inorganic_WasteAmount,
             Photo,
             Remarks,
           },
@@ -635,10 +640,6 @@ export const getAnnualReports = async (req, res) => {
   }
 };
 
-
-
-
-
 export const getAnnualReportOperator = async (req, res) => {
   try {
     const { StateID, DistrictID, BlockID, GPID, ReportID } = req.body; // Extract parameters from request body
@@ -665,6 +666,53 @@ export const getAnnualReportOperator = async (req, res) => {
         JSON.stringify({
           API: "GetAnnualReports",
           REQUEST: { StateID, DistrictID, BlockID, GPID, ReportID },
+          RESPONSE: { success: false, message: "No records found" },
+        })
+      );
+
+      res.status(200).json({
+        success: false,
+        message: "No records found",
+        data: [],
+      });
+    }
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred, please try again",
+      data: [],
+    });
+  }
+};
+
+
+export const getWasteCollectionReportByDateRange = async (req, res) => {
+  try {
+    const { StartDate, EndDate, StateID, DistrictID, BlockID, GPID } = req.body; // Extract parameters from request body
+
+    // Call the model function to get annual reports
+    const result = await getWasteCollectionReportByDateRangeModel(StartDate, EndDate, StateID, DistrictID, BlockID, GPID);
+
+    if (result && result.length > 0) {
+      logger.debug(
+        JSON.stringify({
+          API: "getWasteCollectionReportByDateRange",
+          REQUEST: { StartDate, EndDate, StateID, DistrictID, BlockID, GPID },
+          RESPONSE: { success: true, message: "Data fetched successfully" },
+        })
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Data fetched successfully",
+        data: result,
+      });
+    } else {
+      logger.debug(
+        JSON.stringify({
+          API: "getWasteCollectionReportByDateRange",
+          REQUEST: { StartDate, EndDate, StateID, DistrictID, BlockID, GPID },
           RESPONSE: { success: false, message: "No records found" },
         })
       );
