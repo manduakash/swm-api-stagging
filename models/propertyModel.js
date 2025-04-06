@@ -20,7 +20,7 @@ export async function insertPropertyModel(
 ) {
   try {
     const [rows] = await pool.query(
-      "CALL InsertProperty(?, ?, ?, ?, ?, ?,?,?, ?, ?, ?, ?, ?, ?, ?, ?);",
+      "CALL InsertProperty_v1(?, ?, ?, ?, ?, ?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, @ErrorCode);",
       [
         UniqueNumber,
         PropertyTypeID,
@@ -40,8 +40,11 @@ export async function insertPropertyModel(
         CollectionType,
       ]
     );
-
-    return rows?.affectedRows;
+    
+    const [[errorResult]] = await pool.query("SELECT @ErrorCode as ErrorCode");
+    
+    console.log(errorResult.ErrorCode)
+    return errorResult.ErrorCode; // Return the error code
   } catch (e) {
     console.log(e.message);
     return null;

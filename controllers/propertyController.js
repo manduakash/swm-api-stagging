@@ -100,7 +100,7 @@ export const insertProperty = async (req, res) => {
       CollectionType
     );
 
-    if (result) {
+    if (result == 0) {
       // in inserted
       // debug logging
       logger.debug(
@@ -136,9 +136,9 @@ export const insertProperty = async (req, res) => {
         success: true,
         message: "Data saved successfully",
       });
-    } else {
-     // if data not inserted
-     logger.debug(
+    } else if (result == 2) {
+      // debug logging
+      logger.debug(
         JSON.stringify({
           API: "insertProperty",
           REQUEST: {
@@ -161,17 +161,55 @@ export const insertProperty = async (req, res) => {
           },
           RESPONSE: {
             success: false,
-            message: "Failed to save data",
+            message: "Property already exists with this Unique Number",
           },
         })
       );
       return res.status(400).json({
         success: false,
-        message: "Failed to save data",
+        message: "Property already exists with this Unique Number",
       });
+     
+    }
+    else {
+      // debug logging
+      logger.debug(
+        JSON.stringify({
+          API: "insertProperty",
+          REQUEST: {
+            UniqueNumber,
+            PropertyTypeID,
+            PropertyName,
+            PropertyAddress,
+            StateID,
+            DistrictID,
+            BlockID,
+            GPID,
+            VillageID,
+            PropertyNumber,
+            LandMark,
+            Latitude,
+            Longitude,
+            OwnerName,
+            OwnerPhoneNumber,
+            CollectionType,
+          },
+          RESPONSE: {
+            success: false,
+            message: "Internal Server Error. ERR_DB_001",
+          },
+        })
+      );
+      return res.status(400).json({
+        success: false,
+        message: "Internal Server Error. ERR_DB_001",
+      });
+     
     }
   } catch (error) {
     // error logging
+    console.log(error);
+    
     logger.error(error.message);
     return res.status(500).json({
       success: false,

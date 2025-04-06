@@ -24,6 +24,8 @@ export async function insertWasteCollectionModel(
 
     // Fetch the output parameter `@p_ErrorCode`
     const [[errorResult]] = await pool.query("SELECT @p_ErrorCode as ErrorCode");
+    console.log("Error Code:", errorResult.ErrorCode); // Log the error code
+    
 
     return errorResult.ErrorCode; // Return the error code
   } catch (e) {
