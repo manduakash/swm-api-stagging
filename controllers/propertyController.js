@@ -26,19 +26,13 @@ export const insertProperty = async (req, res) => {
       !(
         UniqueNumber &&
         PropertyTypeID &&
-        PropertyName &&
-        PropertyAddress &&
         StateID &&
         DistrictID &&
         BlockID &&
-        GPID &&
         VillageID &&
         PropertyNumber &&
-        LandMark &&
         Latitude &&
         Longitude &&
-        OwnerName &&
-        OwnerPhoneNumber &&
         CollectionType
       )
     ) {
@@ -74,7 +68,7 @@ export const insertProperty = async (req, res) => {
 
       // sending api response to client
       return res.status(400).json({
-        success: true,
+        success: false,
         message: "Invalid Input Parameter(s)",
         data: null,
       });
@@ -125,7 +119,7 @@ export const insertProperty = async (req, res) => {
             CollectionType,
           },
           RESPONSE: {
-            success: false,
+            success: true,
             message: "Data saved successfully",
           },
         })
