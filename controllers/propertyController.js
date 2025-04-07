@@ -27,13 +27,7 @@ export const insertProperty = async (req, res) => {
         UniqueNumber &&
         PropertyTypeID &&
         StateID &&
-        DistrictID &&
-        BlockID &&
-        VillageID &&
-        PropertyNumber &&
-        Latitude &&
-        Longitude &&
-        CollectionType
+        DistrictID
       )
     ) {
       // if input not provided
